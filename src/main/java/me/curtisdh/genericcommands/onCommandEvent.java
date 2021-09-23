@@ -1,5 +1,7 @@
 package me.curtisdh.genericcommands;
 
+import com.sun.tools.javac.jvm.Gen;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -16,6 +18,11 @@ public class onCommandEvent implements CommandExecutor
         if (!(sender instanceof Player))
         {
             sender.sendMessage("Only players can use that command");
+            return true;
+        }
+        if(!sender.isOp())
+        {
+            sender.sendMessage("You do not have the required permissions for this command.");
             return true;
         }
         Player player = (Player) sender;
@@ -43,15 +50,26 @@ public class onCommandEvent implements CommandExecutor
                 {
                     try
                     {
-                        Integer test = Integer.parseInt(args[0]);
-                        ((Player) sender).setLevel(test);
+                        Player targetPlayer = Bukkit.getPlayer(args[0]);
+                        Integer test;
+                        if(targetPlayer == null)
+                        {
+                            targetPlayer = (Player)sender;
+                            test = Integer.parseInt(args[0]);
+                        }
+                        else
+                        {
+                            test = Integer.parseInt(args[1]);
+                        }
+                        targetPlayer.setLevel(test);
                         break;
                     } catch (Exception e)
                     {
+                        GenericCommands.PrintWithClassName(this,"Error with :SetXPLevel:"+e.getMessage());
                         sender.sendMessage("Incorrect usage:'" + args[0] + "'");
+                        sender.sendMessage("Is the player name correct?");
                     }
                 }
-                sender.sendMessage("Error: usage is as follows: /<command> arg(numerical)");
                 break;
 
 

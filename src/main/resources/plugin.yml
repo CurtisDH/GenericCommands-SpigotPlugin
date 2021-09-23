@@ -17,5 +17,5 @@ commands:
     aliases: Test
   SetXPLevel:
     description: Sets xp level
-    usage: /<command> <int>
+    usage: /<command> (optional)<PlayerName> <int>
     aliases: [ SetLevel,setlevel,SetXP,setxp ]
